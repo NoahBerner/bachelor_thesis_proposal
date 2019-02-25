@@ -52,7 +52,7 @@ architecture.
 \section*{Existing solutions}
 A great number of HLS tools exist, that allow a user to compile high-level source code to hardware circuits on FPGAs \cite{HLS_overview}. HLS tools are great for fast design exploration and accessible hardware generation, but most of them do not create code or hardware circuits for a CPU-FPGA hybrid architecture.
 
-There are a few compliers that do generate code for hybrid architectures, like CHiMPS \cite{CHiMPS} and LegUp \cite{LegUp}. CHiMPS \cite{CHiMPS} compiles ANSI-C to the Xilinx Accelerated Computing Platform (ACP), a hybrid CPU-FPGA platform, that was still under development when the paper was published in 2008. While there were performance gains when using CHiMPS, the practical use of it was limited, as the ACP never caught on. LegUp uses a different strategy by configuring part of the FPGA to be a RISC CPU and thus creating a CPU-FPGA hybrid architecture on one FPGA.
+There are a few compliers that do generate code for hybrid architectures, like CHiMPS \cite{CHiMPS} and LegUp \cite{LegUp}. CHiMPS compiles ANSI-C to the Xilinx Accelerated Computing Platform (ACP), a hybrid CPU-FPGA platform, that was still under development when the paper was published in 2008. While there were performance gains when using CHiMPS, the practical use of it was limited, as the ACP never caught on. LegUp uses a different strategy by configuring part of the FPGA to be a RISC CPU and thus creating a CPU-FPGA hybrid architecture on one FPGA.
 \section*{Objectives and goals}
 The main goal of the thesis is to get closer to a solution for easy programming of a CPU and FPGA hybrid architecture.
 
