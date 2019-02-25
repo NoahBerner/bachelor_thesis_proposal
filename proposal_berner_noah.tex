@@ -15,15 +15,40 @@
 
 \begingroup  
   \centering
-  \LARGE \textbf{Analysis Of Benchmarks On The Enzian Research Computer}\\
+  \LARGE \textbf{
+Automatic CPU-FPGA Hybrid Execution of
+Scientific Benchmarks
+}\\
   \large Noah Berner\par
 \endgroup
 
 \section*{Introduction}
-It is widely known, that the rate at which memory speed increases is smaller than the pace at which microprocessors improve. This has been true for several decades and is unlikely to change drastically in the future. Thus, memory bandwidth is expected to be an even bigger bottleneck in computation than it already is today.\\
-A trend in recent years has been to look further than traditional multiprocessing and to explore the possibilities of stream processing on FPGAs. Intel, for example, acquired Altera, a leading FPGA manufacturer, in 2015 and NVIDIA has included Tensor Cores in their Volta architecture, which are streaming processors for matrix multiplication.\\
-It is unlikely that FPGAs will replace traditional CPUs as their size limits their capabilities and running complete programs on FPGAs would make the architecture too complicated and thus ruining the benefits seen when running small kernels on them. They are more likely going to serve as separate accelerators which take over tasks that benefit from being offloaded to FPGAs, much like vector processors are used in today's architectures.\\
-What is missing today however, is the possibility to compile an existing program in a high level language to a bitstream for a computer that houses an FPGA and a CPU such that the performance of the overall program is increased when comparing it to a traditional CPU-only run. The Enzian research computer \cite{Enzian} is the perfect platform to study the behaviour of such a hybrid architecture, as it allows for fast reconfiguration of the hardware and thus is much more versatile than other systems. 
+Today computational performance increases faster than memory performance.
+Consequently, memory bandwidth will in the future be the primary bottleneck.
+The use of directly wired connections as a replacement for expensive memory
+operations, as available in data-flow platforms such as FPGAs, has the
+potential to reduce the cost of such data transfers. By using specialized
+tensor cores NVIDIA's Volta GPU successfully reduced register transfers
+and Intel provides first hardware that closely integrates FPGAs into their
+general-purpose CPUs.
+
+A combination of data-flow and general-purpose compute devices is needed to
+execute full programs. Data-flow architectures are effective in case the
+computation can be placed statically and independent of the input data, but
+for code that is heavy in dynamic control traditional microprocessors are still
+needed. Hence, we envision for the future an increased use of hybrid
+architectures where suitable computational kernels are offloaded to data-flow
+based accelerators much like SIMD units are used in today's architectures.
+
+The effective compilation of full applications to such devices is necessary
+for them to have broad impact. Today high-level synthesis tools allow for
+the automatic synthesis of computational kernels to FPGA code, but the
+automatic compilation of full scientific benchmarks to future hybrid
+data-flow architectures remains hard. Enzian~\cite{Enzian} provides the
+perfect hard platform to study the behaviour of such a hybrid architecture, as
+it closely combines CPU and FPGA to a single shared-memory system. However,
+Enzian lacks the software environment to automatically port code for this new
+architecture.
 \section*{Existing solutions}
 A great number of HLS tools exist, that allow a user to compile high-level source code to hardware circuits on FPGAs \cite{HLS_overview}. HLS tools are great for fast design exploration and accessible hardware generation, but most of them do not create code or hardware circuits for a CPU-FPGA hybrid architecture.
 
