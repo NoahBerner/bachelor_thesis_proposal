@@ -45,20 +45,22 @@ for them to have broad impact. Today high-level synthesis tools allow for
 the automatic synthesis of computational kernels to FPGA code, but the
 automatic compilation of full scientific benchmarks to future hybrid
 data-flow architectures remains hard. Enzian~\cite{Enzian} provides the
-perfect hard platform to study the behaviour of such a hybrid architecture, as
+perfect hardware platform to study the behaviour of such a hybrid architecture, as
 it closely combines CPU and FPGA to a single shared-memory system. However,
-Enzian lacks the software environment to automatically port code for this new
+Enzian lacks the software environment to automatically port code to this new
 architecture.
 \section*{Existing solutions}
-A great number of HLS tools exist, that allow a user to compile high-level source code to hardware circuits on FPGAs \cite{HLS_overview}. HLS tools are great for fast design exploration and accessible hardware generation, but most of them do not create code or hardware circuits for a CPU-FPGA hybrid architecture.
+For systems which use GPU accelerators instead of FPGAs, a solution is to use Polly-ACC \cite{Polly_ACC}, a compiler which automates the mapping onto GPU hybrid architectures.
+
+A great number of HLS tools exist, for example Vivado High-Level Synthesis \cite{Vivado_HLS}, that allow a user to compile high-level source code to hardware circuits on FPGAs \cite{HLS_overview}. HLS tools are great for fast design exploration and accessible hardware generation, but most of them do not create code or hardware circuits for a CPU-FPGA hybrid architecture.
 
 There are a few compliers that do generate code for hybrid architectures, like CHiMPS \cite{CHiMPS} and LegUp \cite{LegUp}. CHiMPS compiles ANSI-C to the Xilinx Accelerated Computing Platform (ACP), a hybrid CPU-FPGA platform, that was still under development when the paper was published in 2008. While there were performance gains when using CHiMPS, the practical use of it was limited, as the ACP never caught on. LegUp uses a different strategy by configuring part of the FPGA to be a RISC CPU and thus creating a CPU-FPGA hybrid architecture on one FPGA.
 \section*{Objectives and goals}
 The main goal of the thesis is to get closer to a solution for easy programming of a CPU and FPGA hybrid architecture.
 
-Firstly, the two SPEC-benchmarks lbm \cite{SPEC_lbm} and cactusADM \cite{SPEC_cactusADM} are analysed when running on a traditional CPU. This serves as a performance baseline and to find the data movements and data size for later FPGA design decisions.
+Firstly, the two SPEC-benchmarks lbm \cite{SPEC_lbm} and cactusADM \cite{SPEC_cactusADM} are analysed when running on a traditional CPU. This serves as a performance baseline and to find the data movements and data size for later FPGA design decisions. Polly-ACC can also be used to get a baseline for a system running a GPU accelerator.  
 
-In a second phase, the compute kernel of the benchmarks is converted into a hardware design on an FPGA using HLS. Several designs are explored, especially which data is stored where (Registers, BRAM/UltraRAM).
+In a second phase, the compute kernels of the benchmarks are converted into a hardware design on an FPGA using HLS. Several designs are explored, especially which data is stored where (Registers, BRAM/UltraRAM).
 
 Depending on whether or not the Enzian data architecture allows it, a next step is to run the two benchmarks completely on Enzian and to optimize the data transfer between the CPU and the FPGA.
 
@@ -67,6 +69,13 @@ As a stretch goal, it is possible to start automating the process for similar pr
 \bibitem{Enzian} 
 Cock et al. (24 February 2019). \textit{Why Enzian?}
 Retrieved from \url{http://www.enzian.systems/why-enzian.html}
+
+\bibitem{Vivado_HLS} 
+Xilinx Inc. (26 February 2019). \textit{Vivado High-Level Synthesis: Accelerates IP Creation by Enabling C, C++ and System C Specifications.}
+Retrieved from \url{https://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html}
+
+\bibitem{Polly_ACC} 
+Grosser, T., \& Hoefler, T. (2016). Polly-ACC Transparent compilation to heterogeneous hardware. \textit{2016 International Conference on Supercomputing}, ACM, New York, NY, USA, Article 1, 13 pages. doi:10.1145/2925426.2926286
 
 \bibitem{HLS_overview}
 Meeus, W., Van Beeck, K., Goedem{\'e}, T., Meel, J. \& Stroobandt, D. (2012). An overview of today's high-level synthesis tools. \textit{Design Automation for Embedded Systems, 16}(3), 31-51. doi:10.1007/s10617-012-9096-8.
@@ -92,35 +101,36 @@ Retrieved from \url{https://www.spec.org/cpu2006/Docs/436.cactusADM.html}
 \begin{itemize}
 \item \textbf{February 2019:}\\
 Hand in proposal.
-\item \textbf{March 2019:}\\
+\item \textbf{March 2019 (50\%):}\\
 Start analysis of benchmarks on CPU,\\
+Do one benchmark first, then the other (around 1 month each for analysis),\\
 Start writing background section, for example infos about benchmarks, how HLS works and so on.
-\item \textbf{April 2019:}\\
+\item \textbf{April 2019 (50\%):}\\
 Work on analysis on CPU, find data movement and size\\
 Start thinking about design on FPGA,\\
 Write down FPGA design specific info into background section.
-\item \textbf{May 2019:}\\
+\item \textbf{May 2019 (50\%):}\\
 Finish analysis of benchmarks on CPU,\\
 Write down the findings of the CPU analysis,\\
 Use HLS to compile kernel into bitstream for FPGA,\\
 Analyse kernel performance on FPGA,\\
 move data into different places (Register, BRAM/UltraRAM).
-\item \textbf{June 2019:}\\ 
+\item \textbf{June 2019 (100\%):}\\ 
 Start of Lernphase (01 June 2019)\\
 Finish analysis of benchmarks on FPGA,\\
 Write down the findings of the FPGA analysis,\\
 Try running the whole benchmark on CPU and FPGA,\\
 Port the running program to Enzian and figure out data-transfer between CPU and FPGA.
-\item \textbf{July 2019:}\\
+\item \textbf{July 2019 (100\%):}\\
 Reserve two weeks for studying for exams,\\
 In the other two weeks, finish Enzian port,\\
 Write down Enzian related findings.
-\item \textbf{August 2019:}\\
+\item \textbf{August 2019 (100\%):}\\
 Prüfungsession (05 - 30 August 2019) with two core subject exams,\\
 Reserve two weeks for studying for exams and writing them,\\
 Get feedback on current thesis and improve it,\\
 Hand in thesis at 12 August 2019 ($\sim$3 weeks before actual deadline).
-\item \textbf{September 2019:}\\
+\item \textbf{September 2019 (100\%):}\\
 Hold presentation before 11 September 2019 (Notenkonferenz).
 \item \textbf{Write thesis in parallel to analysis and other work.}
 \end{itemize}
