@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 \usepackage{hyperref}
@@ -15,11 +15,18 @@
 
 \begingroup  
   \centering
+{\Large Bachelor Thesis}\\
   \LARGE \textbf{
-Automatic CPU-FPGA Hybrid Execution of
+Automatic CPU-FPGA Hybrid Execution of\\
 Scientific Benchmarks
-}\\
-  \large Noah Berner\par
+}\\~\\
+  \Large Student: Noah Berner~\\~\\
+ 
+  \large Tobias Grosser, David Cock, Timothy Roscoe\\
+ETH Zurich\\
+{
+\centering
+}
 \endgroup
 
 \section*{Introduction}
@@ -49,22 +56,122 @@ perfect hardware platform to study the behaviour of such a hybrid architecture, 
 it closely combines CPU and FPGA to a single shared-memory system. However,
 Enzian lacks the software environment to automatically port code to this new
 architecture.
+
 \section*{Existing solutions}
-For systems which use GPU accelerators instead of FPGAs, a solution is to use Polly-ACC \cite{Polly_ACC}, a compiler which automates the mapping onto GPU hybrid architectures.
+For systems which use GPU accelerators instead of FPGAs, a solution is to use
+Polly-ACC \cite{Polly_ACC}, a compiler which automates the mapping onto GPU
+hybrid architectures.
+A great number of HLS tools exist, for example Vivado High-Level Synthesis
+\cite{Vivado_HLS}, that allow a user to compile high-level source code to
+hardware circuits on FPGAs \cite{HLS_overview}. HLS tools are great for fast
+design exploration and accessible hardware generation, but most of them do not
+create code or hardware circuits for a CPU-FPGA hybrid architecture.
 
-A great number of HLS tools exist, for example Vivado High-Level Synthesis \cite{Vivado_HLS}, that allow a user to compile high-level source code to hardware circuits on FPGAs \cite{HLS_overview}. HLS tools are great for fast design exploration and accessible hardware generation, but most of them do not create code or hardware circuits for a CPU-FPGA hybrid architecture.
+There are a few compliers that do generate code for hybrid architectures, like
+CHiMPS \cite{CHiMPS} and LegUp \cite{LegUp}. CHiMPS compiles ANSI-C to the
+Xilinx Accelerated Computing Platform (ACP), a hybrid CPU-FPGA platform, that
+was still under development when the paper was published in 2008. While there
+were performance gains when using CHiMPS, the practical use of it was limited,
+as the ACP never caught on. LegUp uses a different strategy by configuring part
+of the FPGA to be a RISC CPU and thus creating a CPU-FPGA hybrid architecture
+on one FPGA.
 
-There are a few compliers that do generate code for hybrid architectures, like CHiMPS \cite{CHiMPS} and LegUp \cite{LegUp}. CHiMPS compiles ANSI-C to the Xilinx Accelerated Computing Platform (ACP), a hybrid CPU-FPGA platform, that was still under development when the paper was published in 2008. While there were performance gains when using CHiMPS, the practical use of it was limited, as the ACP never caught on. LegUp uses a different strategy by configuring part of the FPGA to be a RISC CPU and thus creating a CPU-FPGA hybrid architecture on one FPGA.
-\section*{Objectives and goals}
-The main goal of the thesis is to get closer to a solution for easy programming of a CPU and FPGA hybrid architecture.
+\section*{Objectives and goals} The main goal of the thesis is to get closer to
+a solution for easy programming of a CPU and FPGA hybrid architecture.
+Firstly, the two SPEC-benchmarks lbm \cite{SPEC_lbm} and cactusADM
+\cite{SPEC_cactusADM} are analysed when running on a traditional CPU. This
+serves as a performance baseline and to find the data movements and data size
+for later FPGA design decisions. Polly-ACC can also be used to get a baseline
+for a system running a GPU accelerator.  In a second phase, the compute kernels
+of the benchmarks are converted into a hardware design on an FPGA using HLS.
+Several designs are explored, especially which data is stored where (Registers,
+BRAM/UltraRAM).  Depending on whether or not the Enzian data architecture
+allows it, a next step is to run the two benchmarks completely on Enzian and to
+optimize the data transfer between the CPU and the FPGA.  As a stretch goal, it
+is possible to start automating the process for similar programs so that they
+can be compiled to run on Enzian.
 
-Firstly, the two SPEC-benchmarks lbm \cite{SPEC_lbm} and cactusADM \cite{SPEC_cactusADM} are analysed when running on a traditional CPU. This serves as a performance baseline and to find the data movements and data size for later FPGA design decisions. Polly-ACC can also be used to get a baseline for a system running a GPU accelerator.  
+\section*{Work Plan}
 
-In a second phase, the compute kernels of the benchmarks are converted into a hardware design on an FPGA using HLS. Several designs are explored, especially which data is stored where (Registers, BRAM/UltraRAM).
+\begin{enumerate}
+	\item An static and CPU-runtime analysis of the
+two SPEC benchmarks lbm and cactusADM with a focus on memory behavior (e.g.,
+the number of arrays involved, the data volume moved, the volume of read-only
+data, and other metrics) and other FPGA-relevant characteristics.
 
-Depending on whether or not the Enzian data architecture allows it, a next step is to run the two benchmarks completely on Enzian and to optimize the data transfer between the CPU and the FPGA.
+	\item Architect a design of the two applications that enables efficient
+	      FPGA execution.
 
-As a stretch goal, it is possible to start automating the process for similar programs so that they can be compiled to run on Enzian.
+	\item Develop a high-level synthesis implementation of the two
+	      benchmarks to run on FPGA (using OpenCL to for coarse-grained
+	      data transfer between CPU and FPGAs).
+
+	\item Optimize the benchmarks to maximize FPGA performance (e.g.,
+	      exploit BRAM, UltraRAM, ...).
+
+	\item Run applications on an off-the-shelf FPGA and provide a
+	      detailed performance, including the overhead of data-transfers.
+
+	\item Port applications to Enzian (assuming a suitable HLS software
+	      is available for Enzian at this point).
+
+	\item Exploit Enzian's fine-grained data-transfer support to
+	      accelerate the data-transfers to the FPGA (to a degree the
+	      Enzian memory system supports at this point).
+
+	\item (optional) Automate this translation in the context of
+	      LLVM and Polly.
+
+\end{enumerate}
+
+\section*{Deliverables}
+
+The project should result in the following concrete deliverables:
+
+\begin{enumerate}
+	\item  Thesis dissertation. This should follow the normal format for
+	       such a thesis, and contain at least the following:
+	\begin{itemize}
+		\item introduction / motivation of the problem
+		\item discussion of background
+		\item thorough analysis of related work
+		\item discussion of the performed performance analysis
+		\item description of the resulting implementation including its
+		      design
+		\item experimental evaluation
+	\end{itemize}
+	\item Complete source code for:
+	\begin{itemize}
+		\item resulting prototype
+		\item benchmarking/data analysis scripts and corresponding results
+	\end{itemize}
+		The resulting code should also be accompanied with enough
+		documentation to allow complete reproduction of the
+		experimental results in the paper.
+	\item Presentation of thesis results and demonstration of
+	      functionality.
+\end{enumerate}
+
+
+\section*{Grading Scheme}
+
+The minimum requirements for a grade of 5.0 are as follows:
+
+\begin{itemize}
+	\item Successful completion of work items 1–4.
+	\item Production of deliverables 1–3 to a satisfactory standard.
+\end{itemize}
+
+The grade will be reduced if these goals are not achieved, except in the case
+of extreme extenuating circumstances (such as an unforeseeable and unresolvable
+technical barrier to completing the work, accompanied by an acceptable
+alternative work item).
+
+A grade of 5.50 or higher will be awarded for the completion of the work to an
+unusually high quality, the addition of extra work (e.g., large degree of
+automation), or a particularly novel approach to the problem (such as might
+result in a workshop publication).
+
 \begin{thebibliography}{3}
 \bibitem{Enzian} 
 Cock et al. (24 February 2019). \textit{Why Enzian?}
